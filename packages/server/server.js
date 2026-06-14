@@ -1,31 +1,27 @@
 const express = require('express');
-const cors = require('cors');
 const http = require('http');
 
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-// Manual CORS middleware (Railway proxy workaround)
+// CORS middleware - aggressive override
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://bangtrang-client.vercel.app',
-    'https://bangtrang.vercel.app'
-  ];
+  const origin = req.headers.origin || '*';
 
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
+  // Remove any existing CORS headers set by Railway
+  res.removeHeader('Access-Control-Allow-Origin');
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // Set our own
+  res.set('Access-Control-Allow-Origin', origin);
+  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+  res.set('Access-Control-Allow-Credentials', 'true');
+  res.set('Access-Control-Max-Age', '86400');
 
+  // Handle preflight
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    return res.sendStatus(204);
   }
 
   next();
