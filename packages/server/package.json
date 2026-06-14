@@ -7,7 +7,7 @@
     "dev": "node --loader tsx src/index.ts",
     "dev:minimal": "node --loader tsx src/index.minimal.ts",
     "build": "tsc || true",
-    "start": "node --loader tsx src/index.ts",
+    "start": "node server.js",
     "start:minimal": "node --loader tsx src/index.minimal.ts",
     "migrate": "node --loader tsx src/db/migrate.ts"
   },
