@@ -6,21 +6,30 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-// CORS configuration
-const corsOptions = {
-  origin: [
+// Manual CORS middleware (Railway proxy workaround)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
     'https://bangtrang-client.vercel.app',
     'https://bangtrang.vercel.app'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
+  ];
 
-// Middleware
-app.use(cors(corsOptions));
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
