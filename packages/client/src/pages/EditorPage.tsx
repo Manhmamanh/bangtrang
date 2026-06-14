@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Stage, Layer, Rect, Text, Image as KonvaImage } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Text, Group } from 'react-konva';
 import Konva from 'konva';
 import { useBoardStore, useAuthStore } from '../utils/store';
 import { boardAPI } from '../utils/api';
@@ -46,11 +46,15 @@ export default function EditorPage() {
     const loadBoard = async () => {
       try {
         const res = await boardAPI.getBoard(boardId);
-        setCurrentBoard(res.data.board);
-        setObjects(res.data.objects);
-        setMembers(res.data.members);
+        if (res.data.board) setCurrentBoard(res.data.board);
+        setObjects(res.data.objects || []);
+        setMembers(res.data.members || []);
 
-        initWebSocket(token, boardId);
+        try {
+          initWebSocket(token, boardId);
+        } catch (wsErr) {
+          console.warn('WebSocket unavailable (continuing offline):', wsErr);
+        }
       } catch (error) {
         console.error('Failed to load board:', error);
         navigate('/');
@@ -133,6 +137,91 @@ export default function EditorPage() {
   };
 
   const boardName = currentBoard?.name || `Whiteboard ${boardId?.slice(-6)}`;
+
+  const renderObject = (obj: any) => {
+    const isSelected = selectedObjects.includes(obj.id);
+    const stroke = isSelected ? '#d32f2f' : obj.data.stroke;
+    const sWidth = isSelected ? 3 : obj.data.strokeWidth;
+
+    const commonProps = {
+      onClick: () => handleObjectSelect(obj.id),
+      draggable: true,
+      onDragEnd: (e: any) => {
+        const newData = { ...obj.data, x: e.target.x(), y: e.target.y() };
+        updateObject(obj.id, { data: newData });
+        sendAction(boardId!, 'move', obj.id, obj.data, newData);
+      },
+    };
+
+    if (obj.type === 'circle') {
+      return (
+        <Circle
+          key={obj.id}
+          x={obj.data.x + obj.data.width / 2}
+          y={obj.data.y + obj.data.height / 2}
+          radius={Math.max(obj.data.width, obj.data.height) / 2}
+          fill={obj.data.fill}
+          stroke={stroke}
+          strokeWidth={sWidth}
+          {...commonProps}
+        />
+      );
+    }
+
+    if (obj.type === 'text') {
+      return (
+        <Text
+          key={obj.id}
+          x={obj.data.x}
+          y={obj.data.y}
+          text={obj.data.content || 'Text'}
+          fontSize={obj.data.fontSize || 18}
+          fill={obj.data.stroke}
+          {...commonProps}
+        />
+      );
+    }
+
+    if (obj.type === 'sticky') {
+      return (
+        <Group key={obj.id} x={obj.data.x} y={obj.data.y} {...commonProps}>
+          <Rect
+            width={obj.data.width}
+            height={obj.data.height}
+            fill={obj.data.fill}
+            stroke={stroke}
+            strokeWidth={sWidth}
+            cornerRadius={4}
+            shadowColor="#000"
+            shadowBlur={4}
+            shadowOpacity={0.2}
+          />
+          <Text
+            text={obj.data.content || 'Edit me'}
+            fontSize={obj.data.fontSize || 14}
+            fill="#333"
+            padding={8}
+            width={obj.data.width}
+          />
+        </Group>
+      );
+    }
+
+    // default: rectangle
+    return (
+      <Rect
+        key={obj.id}
+        x={obj.data.x}
+        y={obj.data.y}
+        width={obj.data.width}
+        height={obj.data.height}
+        fill={obj.data.fill}
+        stroke={stroke}
+        strokeWidth={sWidth}
+        {...commonProps}
+      />
+    );
+  };
 
   return (
     <div className="editor-container">
@@ -234,30 +323,7 @@ export default function EditorPage() {
           style={{ cursor: toolMode === 'select' ? 'default' : 'crosshair' }}
         >
           <Layer ref={layerRef}>
-            {objects.map((obj) => (
-              <Rect
-                key={obj.id}
-                x={obj.data.x}
-                y={obj.data.y}
-                width={obj.data.width}
-                height={obj.data.height}
-                fill={obj.data.fill}
-                stroke={selectedObjects.includes(obj.id) ? '#d32f2f' : obj.data.stroke}
-                strokeWidth={selectedObjects.includes(obj.id) ? 3 : obj.data.strokeWidth}
-                onClick={() => handleObjectSelect(obj.id)}
-                draggable
-                onDragEnd={(e) => {
-                  updateObject(obj.id, {
-                    data: { ...obj.data, x: e.target.x(), y: e.target.y() },
-                  });
-                  sendAction(boardId!, 'move', obj.id, obj.data, {
-                    ...obj.data,
-                    x: e.target.x(),
-                    y: e.target.y(),
-                  });
-                }}
-              />
-            ))}
+            {objects.map((obj) => renderObject(obj))}
           </Layer>
         </Stage>
 

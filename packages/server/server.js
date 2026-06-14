@@ -145,11 +145,9 @@ app.get('/api/boards/:boardId', (req, res) => {
     return res.status(404).json({ error: 'Board not found' });
   }
   res.json({
-    data: {
-      board,
-      objects: board.elements || [],
-      members: []
-    }
+    board,
+    objects: board.elements || [],
+    members: board.members ? board.members.map((id) => ({ user_id: id, full_name: 'Member' })) : []
   });
 });
 
