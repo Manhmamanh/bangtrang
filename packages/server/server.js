@@ -105,8 +105,46 @@ app.get('/api/auth/me', (req, res) => {
   });
 });
 
+// Mock in-memory storage
+const boards = {};
+
 app.get('/api/boards', (req, res) => {
-  res.json([]);
+  res.json(Object.values(boards));
+});
+
+app.post('/api/boards', (req, res) => {
+  try {
+    const { name, description } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'Board name required' });
+    }
+
+    const boardId = 'board_' + Date.now();
+    const newBoard = {
+      id: boardId,
+      name,
+      description: description || '',
+      createdAt: new Date().toISOString(),
+      elements: [],
+      members: ['user_mock']
+    };
+
+    boards[boardId] = newBoard;
+
+    res.status(201).json(newBoard);
+  } catch (error) {
+    console.error('Create board error:', error);
+    res.status(500).json({ error: 'Failed to create board', message: error.message });
+  }
+});
+
+app.get('/api/boards/:boardId', (req, res) => {
+  const board = boards[req.params.boardId];
+  if (!board) {
+    return res.status(404).json({ error: 'Board not found' });
+  }
+  res.json(board);
 });
 
 // 404 handler

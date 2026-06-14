@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from './store';
 
-const API_URL = 'https://bangtrang.railway.app/api'; // Railway backend
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 console.log('API URL:', API_URL);
 
 const api = axios.create({ baseURL: API_URL });
