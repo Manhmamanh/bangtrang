@@ -1,0 +1,26 @@
+{
+  "name": "tppo-whiteboard",
+  "version": "0.0.1",
+  "description": "Real-time collaborative whiteboard for teams",
+  "private": true,
+  "workspaces": [
+    "packages/server",
+    "packages/client"
+  ],
+  "scripts": {
+    "dev": "docker-compose up",
+    "build": "npm run build -w packages/server && npm run build -w packages/client",
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down",
+    "clean": "docker-compose down -v && rm -rf packages/*/node_modules"
+  },
+  "keywords": [
+    "whiteboard",
+    "collaboration",
+    "brainstorming",
+    "real-time",
+    "canvas"
+  ],
+  "author": "TPPO",
+  "license": "PROPRIETARY"
+}

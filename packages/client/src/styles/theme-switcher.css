@@ -1,0 +1,75 @@
+/* Theme Switcher */
+.theme-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-selector {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.theme-option:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.theme-option.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-icon {
+  font-size: 16px;
+  display: inline-block;
+}
+
+.theme-label {
+  display: none;
+}
+
+/* Show labels on larger screens */
+@media (min-width: 640px) {
+  .theme-label {
+    display: inline;
+  }
+}
+
+/* Hide icons on very large screens */
+@media (min-width: 1024px) {
+  .theme-option {
+    gap: 8px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .theme-selector {
+    gap: 0;
+  }
+
+  .theme-option {
+    padding: 6px 8px;
+  }
+}

@@ -1,0 +1,305 @@
+/* Mobile-first responsive design */
+
+/* Small phones (320px - 480px) */
+@media (max-width: 480px) {
+  /* Typography */
+  h1 {
+    font-size: 18px !important;
+  }
+
+  h2 {
+    font-size: 16px !important;
+  }
+
+  .timer-number {
+    font-size: 32px;
+  }
+
+  /* Login Page */
+  .login-box {
+    padding: 20px;
+    margin: 16px;
+  }
+
+  .login-box h1 {
+    font-size: 20px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  /* Form */
+  .form-group input,
+  .form-group textarea {
+    padding: 8px 10px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+
+  /* Editor */
+  .editor-header {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .editor-header h1 {
+    font-size: 16px;
+  }
+
+  .toolbar {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tool-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  /* Sidebar */
+  .editor-sidebar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 40vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 100;
+  }
+
+  .editor-content {
+    margin-bottom: 40vh;
+  }
+
+  .sidebar-section {
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-section h3 {
+    font-size: 12px;
+  }
+
+  /* Boards */
+  .boards-header {
+    padding: 12px 16px;
+  }
+
+  .header-actions {
+    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .boards-grid {
+    grid-template-columns: 1fr;
+    padding: 0 12px 40px;
+    gap: 12px;
+  }
+
+  .board-card {
+    padding: 16px;
+  }
+
+  .board-card h3 {
+    font-size: 16px;
+  }
+
+  /* Modal */
+  .modal {
+    padding: 20px;
+    max-width: 90vw;
+  }
+
+  .modal h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  /* Timer */
+  .brainstorm-timer {
+    margin: 8px;
+    padding: 16px;
+  }
+
+  .timer-presets {
+    gap: 4px;
+  }
+
+  .preset-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .timer-btn.large {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .timer-btn:not(.large) {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .timer-controls {
+    margin-bottom: 12px;
+  }
+
+  /* Buttons */
+  .create-btn {
+    margin: 12px 0;
+    width: calc(100% - 24px);
+  }
+
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 44px; /* iOS touch target */
+  }
+
+  /* Prevent double-tap zoom */
+  input,
+  button {
+    font-size: 16px;
+  }
+}
+
+/* Tablets (481px - 768px) */
+@media (max-width: 768px) {
+  .timer-number {
+    font-size: 40px;
+  }
+
+  .editor-sidebar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 35vh;
+    z-index: 100;
+  }
+
+  .editor-content {
+    margin-bottom: 35vh;
+  }
+
+  .boards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    padding: 0 16px 40px;
+    gap: 12px;
+  }
+
+  .login-box {
+    max-width: 90vw;
+  }
+
+  .modal {
+    max-width: 85vw;
+  }
+
+  /* Hide labels on smaller screens */
+  .theme-label {
+    display: none;
+  }
+
+  .preset-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
+/* Landscape orientation */
+@media (max-height: 500px) {
+  .editor-sidebar {
+    max-height: 25vh;
+  }
+
+  .editor-content {
+    margin-bottom: 25vh;
+  }
+
+  .timer-number {
+    font-size: 28px;
+  }
+
+  .timer-controls {
+    gap: 8px;
+  }
+
+  .timer-btn.large {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+/* Touch-friendly UI */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .btn:hover {
+    background: var(--primary);
+  }
+
+  .tool-btn:hover {
+    border-color: var(--border);
+    color: var(--text-primary);
+  }
+
+  .board-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Increase touch targets */
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Remove :active state delay */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Better scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Dark mode on mobile */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+  html.dark-mode {
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Print styles */
+@media print {
+  .editor-header,
+  .editor-sidebar,
+  .timer-controls,
+  .btn,
+  button {
+    display: none !important;
+  }
+
+  canvas {
+    max-width: 100%;
+  }
+}
