@@ -4,14 +4,27 @@ const http = require('http');
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
+
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://bangtrang-client.vercel.app',
+    'https://bangtrang.vercel.app'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Routes
+// Health check
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -21,12 +34,79 @@ app.get('/health', (req, res) => {
   });
 });
 
+// API Status
 app.get('/api/status', (req, res) => {
   res.json({
     message: 'TPPO Whiteboard API is running',
     version: '0.0.1',
     node_version: process.version
   });
+});
+
+// Auth Routes (Mock - replace with real auth when DB ready)
+app.post('/api/auth/signup', (req, res) => {
+  try {
+    const { email, password, fullName } = req.body;
+
+    if (!email || !password || !fullName) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Mock response - will integrate with database
+    res.status(201).json({
+      user: {
+        id: 'user_' + Date.now(),
+        email,
+        fullName
+      },
+      token: 'mock_token_' + Date.now(),
+      message: 'Account created successfully (mock)'
+    });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ error: 'Signup failed', message: error.message });
+  }
+});
+
+app.post('/api/auth/login', (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
+    }
+
+    // Mock response - will integrate with database
+    res.json({
+      user: {
+        id: 'user_mock',
+        email,
+        fullName: 'Mock User'
+      },
+      token: 'mock_token_' + Date.now(),
+      message: 'Logged in successfully (mock)'
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed', message: error.message });
+  }
+});
+
+app.get('/api/auth/me', (req, res) => {
+  res.json({
+    id: 'user_mock',
+    email: 'test@example.com',
+    fullName: 'Mock User'
+  });
+});
+
+app.get('/api/boards', (req, res) => {
+  res.json([]);
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found', path: req.path });
 });
 
 // Error handler
@@ -38,16 +118,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
-
 // Start server
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server running on port ${PORT}`);
-  console.log(`🌐 Health check: http://localhost:${PORT}/health`);
-  console.log(`📡 Status: http://localhost:${PORT}/api/status`);
+  console.log(`🌐 Health: http://localhost:${PORT}/health`);
+  console.log(`🔐 Auth: POST http://localhost:${PORT}/api/auth/signup`);
 });
 
 // Graceful shutdown
