@@ -1,34 +1,12 @@
 {
   "version": 2,
-  "builds": [
+  "buildCommand": "cd packages/client && npm install && npm run build",
+  "outputDirectory": "packages/client/dist",
+  "framework": "vite",
+  "rewrites": [
     {
-      "src": "packages/server/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "packages/client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "source": "/:path*",
+      "destination": "/index.html"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "packages/server/server.js"
-    },
-    {
-      "src": "/health",
-      "dest": "packages/server/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "packages/client/dist/$1"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "PORT": "3000"
-  }
+  ]
 }
