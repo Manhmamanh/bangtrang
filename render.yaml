@@ -7,13 +7,13 @@ services:
     user: postgres
     region: singapore
 
-  # Backend API Server
+  # Backend API Server (Minimal - Database optional)
   - type: web
     name: bangtrang-api
     plan: free
     runtime: node
     region: singapore
-    startCommand: cd packages/server && npm run build && npm start
+    startCommand: cd packages/server && npm run build && npm run start:minimal
     envVars:
       - key: NODE_ENV
         value: production

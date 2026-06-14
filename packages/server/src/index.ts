@@ -38,12 +38,19 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 // Start server
 async function start() {
   try {
-    await connectRedis();
+    // Try to connect Redis, but don't fail if unavailable
+    try {
+      await connectRedis();
+      console.log('✅ Redis connected');
+    } catch (redisError) {
+      console.warn('⚠️ Redis unavailable (optional):', (redisError as Error).message);
+    }
+
     httpServer.listen(PORT, () => {
       console.log(`✅ Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error('❌ Failed to start server:', error);
     process.exit(1);
   }
 }
