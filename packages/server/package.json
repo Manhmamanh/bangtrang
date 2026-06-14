@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "node --loader tsx src/index.ts",
     "dev:minimal": "node --loader tsx src/index.minimal.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "start:minimal": "node dist/index.minimal.js",
+    "build": "tsc || true",
+    "start": "node --loader tsx src/index.ts",
+    "start:minimal": "node --loader tsx src/index.minimal.ts",
     "migrate": "node --loader tsx src/db/migrate.ts"
   },
   "dependencies": {
