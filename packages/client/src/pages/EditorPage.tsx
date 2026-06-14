@@ -36,6 +36,9 @@ export default function EditorPage() {
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const [showVotePanel, setShowVotePanel] = useState(false);
+  const [fillColor, setFillColor] = useState('#e3f2fd');
+  const [strokeColor, setStrokeColor] = useState('#1976d2');
+  const [strokeWidth, setStrokeWidth] = useState(2);
 
   useEffect(() => {
     if (!boardId || !token) return;
@@ -86,9 +89,9 @@ export default function EditorPage() {
           y: Math.min(startPos.y, pos.y),
           width,
           height,
-          fill: toolMode === 'sticky' ? '#ffd700' : '#e3f2fd',
-          stroke: '#1976d2',
-          strokeWidth: 2,
+          fill: toolMode === 'sticky' ? '#ffd700' : fillColor,
+          stroke: strokeColor,
+          strokeWidth: strokeWidth,
           content: toolMode === 'sticky' || toolMode === 'text' ? 'Edit me' : '',
           fontSize: 14,
           rotation: 0,
@@ -129,9 +132,7 @@ export default function EditorPage() {
     document.body.removeChild(link);
   };
 
-  if (!currentBoard) {
-    return <div className="loading-editor">Loading whiteboard...</div>;
-  }
+  const boardName = currentBoard?.name || `Whiteboard ${boardId?.slice(-6)}`;
 
   return (
     <div className="editor-container">
@@ -140,7 +141,7 @@ export default function EditorPage() {
           <button onClick={() => navigate('/')} className="back-btn">
             ← Back
           </button>
-          <h1>{currentBoard.name}</h1>
+          <h1>{boardName}</h1>
         </div>
         <div className="header-middle">
           <div className="toolbar">
@@ -179,6 +180,30 @@ export default function EditorPage() {
             >
               📌 Sticky
             </button>
+            <div className="toolbar-divider" />
+            <input
+              type="color"
+              value={fillColor}
+              onChange={(e) => setFillColor(e.target.value)}
+              title="Fill color"
+              className="color-picker"
+            />
+            <input
+              type="color"
+              value={strokeColor}
+              onChange={(e) => setStrokeColor(e.target.value)}
+              title="Stroke color"
+              className="color-picker"
+            />
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={strokeWidth}
+              onChange={(e) => setStrokeWidth(Number(e.target.value))}
+              title="Stroke width"
+              className="stroke-slider"
+            />
           </div>
         </div>
         <div className="header-right">

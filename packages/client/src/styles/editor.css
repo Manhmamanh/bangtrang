@@ -88,6 +88,32 @@
   border-color: var(--primary);
 }
 
+.toolbar-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.color-picker {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.color-picker:hover {
+  border-color: var(--primary);
+}
+
+.stroke-slider {
+  width: 80px;
+  height: 6px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
 .header-right {
   display: flex;
   gap: 12px;
