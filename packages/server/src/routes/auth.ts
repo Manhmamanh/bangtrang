@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { queryOne, queryMany } from '../utils/db.js';
-import { hashPassword, verifyPassword, generateToken } from '../utils/auth.js';
-import { AuthRequest, authMiddleware } from '../middleware/auth.js';
+import { queryOne, queryMany } from '../utils/db';
+import { hashPassword, verifyPassword, generateToken } from '../utils/auth';
+import { AuthRequest, authMiddleware } from '../middleware/auth';
 
 const router = Router();
 

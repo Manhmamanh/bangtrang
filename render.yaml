@@ -13,7 +13,7 @@ services:
     plan: free
     runtime: node
     region: singapore
-    startCommand: cd packages/server && npm install && npm start
+    startCommand: cd packages/server && npm run build && npm start
     envVars:
       - key: NODE_ENV
         value: production

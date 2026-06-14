@@ -2,7 +2,6 @@
   "name": "tppo-whiteboard-server",
   "version": "0.0.1",
   "description": "Real-time collaborative whiteboard server",
-  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "dev": "node --loader tsx src/index.ts",

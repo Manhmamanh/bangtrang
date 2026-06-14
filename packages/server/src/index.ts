@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import dotenv from 'dotenv';
-import { connectRedis } from './utils/redis.js';
-import { initializeWebSocket } from './services/websocket.js';
-import authRoutes from './routes/auth.js';
-import boardRoutes from './routes/boards.js';
+import { connectRedis } from './utils/redis';
+import { initializeWebSocket } from './services/websocket';
+import authRoutes from './routes/auth';
+import boardRoutes from './routes/boards';
 
 dotenv.config();
 

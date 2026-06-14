@@ -1,9 +1,9 @@
 import { Server as HTTPServer } from 'http';
 import { Server as SocketServer, Socket } from 'socket.io';
-import { verifyToken } from '../utils/auth.js';
-import { publishEvent } from '../utils/redis.js';
-import { queryOne, query } from '../utils/db.js';
-import { WSMessage, CursorUpdate } from '../types/index.js';
+import { verifyToken } from '../utils/auth';
+import { publishEvent } from '../utils/redis';
+import { queryOne, query } from '../utils/db';
+import { WSMessage, CursorUpdate } from '../types/index';
 
 interface SocketWithUser extends Socket {
   userId?: string;
